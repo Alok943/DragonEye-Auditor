@@ -1,0 +1,302 @@
+[
+  {
+    "text": "Very good quality product, I loved it.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Bahut hi ghatiya product hai, paise waste mat karo.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Accha product hai, fast delivery.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Waste of money, don't buy.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Product packaging was very bad but content is okay.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Quality toh thik hai par size thoda chota hai.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Maine blue order kiya tha par mujhe red color mila, very disappointing.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Delivery boy ka behavior sahi nahi tha, calls ignore kar raha tha.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Value for money product, display quality is top notch.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Bhai delivery itni fast hai ki mere order karne se pehle hi ghar pahunch gaya!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Quality itni ‘behtareen’ hai ki ek din mein hi toot gaya. Paisa vasool!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Abey kya kachra bhej diya hai? Customer care wale sab chor hain.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Ghar baithe 50k kamayein, bas is link par click karein: bit.ly/loot-offers",
+    "label": "SPAM",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Ek number product hai bhidu, ek dum jhakaas!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Sasta nasha karke pack kiya hai kya? Box khali tha!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Congratulations! You won a free iPhone. Claim here now!",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Ghatiya service, ullu banaya humko.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Work from home opportunity, earn 2000 daily. WhatsApp 9876543210.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Bahut sundar product hai, dhanyawad.",
+    "label": "SAFE",
+    "lang": "hi",
+    "difficulty": "easy"
+  },
+  {
+    "text": "I ordered this for my sister, she loved the fabric quality.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Amazon ki delivery itni slow hai ki agle janam mein item milega.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Faltu product, dimag ka dahi kar diya.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Lallantop quality hai bhai, maza aa gaya.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Win free 500rs cashback guaranteed, join telegram channel now.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Battery life is very poor, 2 ghante bhi nahi chalta.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Don't buy this trash. Sellers are frauds.",
+    "label": "TOXIC",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Amazing experience, definitely worth buying.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Product fake hai, original brand ka nahi hai.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Yeh lo, naya tareeka lootne ka. Fraud company.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Free Recharge ke liye is link pe jao, jaldi karein!",
+    "label": "SPAM",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Mera paisa wapas karo varna case kar dunga.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Packaging top level thi, product safe mil gaya.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Too expensive for this quality, not recommended.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Bhai sahab, kya item bheja hai, system faad diya!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Get paid for reviewing products, click to join our team.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Bakwas hai, isse accha toh raste se le leta.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Sound quality is pathetic, lots of noise.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Itna slow delivery hai ki baccha bada ho jaye tab tak product aayega.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Chor hai sab ke sab, mera refund nahi diya.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Best budget phone in the market right now.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Kyun public ka chutiya kaat rahe ho? Ghatiya product.",
+    "label": "TOXIC",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Offer offer offer! 90% discount on all items. Visit now.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Kapda ek dum raddi hai, pocha banane layak bhi nahi.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "The camera quality is decent for this price range.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Tumhari service se behtar toh sarkari daftar hai.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Register for free samples here and win prizes.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Bohot badhiya experience raha, 5 stars!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Sellers should be ashamed for selling such products.",
+    "label": "TOXIC",
+    "lang": "en",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Kya mast deal mili hai, maza aa gaya boss!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Follow for daily giveaways of electronics products.",
+    "label": "SPAM",
+    "lang": "en",
+    "difficulty": "medium"
+  }
+]

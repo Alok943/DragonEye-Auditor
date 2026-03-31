@@ -1,0 +1,30 @@
+# --- Python Specific ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# --- Environment & Security (CRITICAL) ---
+.env
+.python-version
+# Do NOT ignore your data/reviews_v1.json since your teammate needs it!
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Networking/Logs ---
+*.log
+ngrok.exe
