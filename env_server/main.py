@@ -1,92 +1,83 @@
-from fastapi import FastAPI, HTTPException
-from env_server.core.models import Action, Observation, StepResult
-from env_server.core.environment import AuditorEnv
-from typing import Optional, Dict, Any
-# Initialize the FastAPI application
-app = FastAPI(
-    title="OpenEnv: Hinglish Review Auditor",
-    description="A reinforcement learning environment for auditing Indian e-commerce reviews.",
-    version="1.0.0"
-)
+import json
+import os
+from datetime import datetime, timezone
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-# Instantiate our environment instance
-# In a production app, we'd use database sessions, but for a hackathon, memory is perfect.
-env = AuditorEnv()
+from .core.evaluator import get_agent_decision, get_auditor_grade
+from .core.models import Observation, Action, StepResult 
 
-@app.get("/")
-async def health_check():
-    """Simple health check endpoint for Ngrok/Docker pinging."""
-    return {"status": "online", "environment": "Hinglish Auditor v1"}
+app = FastAPI(title="DragonEye-Auditor: OpenEnv")
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Note: Ensure this path correctly points to where your data folder is!
+DATA_PATH = os.path.join(BASE_DIR, "data", "reviews_v1.json")
+
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+    REAL_REVIEWS = json.load(f)
+
+current_review_index = 0
+
+# --- FIX 1: Map dataset difficulty to the YAML Task IDs ---
+TASK_MAPPING = {
+    "easy": "task_1_language_id",
+    "medium": "task_2_basic_moderation",
+    "hard": "task_3_sarcasm_slang"
+}
+
+@app.get("/state", response_model=Observation)
+async def get_state():
+    review = REAL_REVIEWS[current_review_index]
+    # Grab the correct ID based on the current review's difficulty
+    current_task_id = TASK_MAPPING.get(review.get("difficulty", "easy"), "task_2_basic_moderation")
+    
+    return Observation(
+        session_id=str(review.get("id", current_review_index)),
+        review_text=review["text"],
+        task_id=current_task_id # <-- FIX 1: Added mandatory task_id
+    )
 
 @app.post("/reset", response_model=Observation)
 async def reset_environment():
-    """
-    Resets the environment and provides the first review to the agent.
-    """
-    try:
-        return env.reset()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/state", response_model=Observation)
-async def get_current_state():
-    """
-    Returns the current observation without advancing the environment.
-    Required by OpenEnv Spec.
-    """
-    try:
-        # If the environment hasn't been reset yet, start it.
-        if not env.current_item:
-            return env.reset()
-            
-        return Observation(
-            review_text=env.current_item["text"],
-            session_id=f"audit_{env.session_count}"
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+    global current_review_index
+    START_INDEX = int(os.getenv("START_INDEX", 0))
+    current_review_index = START_INDEX
+    return await get_state()
+    
 @app.post("/step", response_model=StepResult)
 async def step_environment(action: Action):
-    """
-    Takes an action from the AI agent, calculates the reward, and advances the state.
-    """
-    try:
-        return env.step(action)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    global current_review_index 
     
-# ==========================================
-# OpenEnv Administrative Endpoints
-# ==========================================
-
-@app.get("/health")
-async def health_endpoint():
-    """Required by HF Spaces to ensure the container is alive."""
-    return {"status": "healthy"}
-
-@app.get("/metadata")
-async def metadata_endpoint():
-    """Provides the validator with your environment's identity."""
-    return {
-        "name": "hinglish-review-auditor",
-        "description": "A real-world environment for auditing Indian e-commerce reviews in mixed-language (Hinglish)."
+    expected_truth = REAL_REVIEWS[current_review_index]
+    
+    reward = get_auditor_grade(
+        review_text=expected_truth["text"],
+        agent_decision=action.model_dump(),
+        expected=expected_truth
+    ) 
+    
+    log_entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "model": action.model_name,
+        "review_id": expected_truth.get("id", current_review_index),
+        "expected_label": expected_truth.get("label"),
+        "agent_label": action.label,
+        "reward": reward,
+        "reasoning": action.reasoning
     }
+    
+    log_path = "/tmp/audit_results.jsonl" if os.getenv("SPACE_ID") else "audit_results.jsonl"
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(log_entry) + "\n")
+        
+    # --- FIX 3: Removed the bad print statement here ---
 
-@app.get("/schema")
-async def schema_endpoint():
-    """Dynamically exports your Pydantic v2 schemas for the AI agent."""
-    return {
-        "action": Action.model_json_schema(),
-        "observation": Observation.model_json_schema(),
-        "state": Observation.model_json_schema() # State and Observation are the same here
-    }
-
-@app.post("/mcp")
-async def mcp_endpoint(payload: Optional[Dict[str, Any]] = None):
-    """Model Context Protocol (MCP) required endpoint."""
-    return {
-        "jsonrpc": "2.0",
-        "id": payload.get("id", 1) if payload else 1,
-        "result": {"status": "mcp_ready"}
-    }
+    # --- FIX 2: Made progression sequential instead of random ---
+    current_review_index = (current_review_index + 1) % len(REAL_REVIEWS)
+    
+    return StepResult(
+        observation=await get_state(), # <-- Returns the new state cleanly
+        reward=reward,
+        done=True, 
+        info={"message": f"Agent scored: {reward:.2f}/1.0", "gt_label": expected_truth.get("label")}
+    )

@@ -26,8 +26,10 @@ def clean_and_parse_json(raw_text: str) -> dict:
 def get_agent_decision(review_text: str) -> dict:
     """Calls the active model to moderate the review."""
     prompt = (
-        f"Moderate this Hinglish review. Return JSON ONLY: "
-        f"{{'label': 'SAFE'|'ABUSE', 'lang': 'hindi'|'english'|'hinglish'}}. "
+        f"Moderate this review. Return JSON ONLY with exactly these keys: "
+        f"- 'label': (SAFE, SPAM, or TOXIC)\n"
+        f"- 'lang': (en, hi, or hinglish)\n"
+        f"- 'reasoning': (1 sentence explaining why)\n"
         f"Review: {review_text}"
     )
     
@@ -35,7 +37,8 @@ def get_agent_decision(review_text: str) -> dict:
         response = requests.post(
             AGENT_API_URL, 
             json={"model": AGENT_MODEL, "prompt": prompt, "stream": False},
-            timeout=15
+            timeout=15,
+            verify=False
         )
         response.raise_for_status()
         raw_output = response.json().get('response', '{}')

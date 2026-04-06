@@ -16,6 +16,7 @@ class Action(BaseModel):
     reasoning: str = Field(
         ..., description="A brief explanation of why the AI chose this label."
     )
+    model_name: str = Field(default="unknown", description="The LLM used for inference.")
 
 # ==========================================
 # 2. The Environment's State (What the AI sees)
@@ -27,6 +28,7 @@ class Observation(BaseModel):
     session_id: str = Field(
         ..., description="Unique ID for tracking the current audit session."
     )
+    task_id: str # <-- ADD THIS so the validator knows which task is running
 
 # ==========================================
 # 3. The OpenEnv Loop Standard (The Response)
