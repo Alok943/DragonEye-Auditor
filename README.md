@@ -1,9 +1,12 @@
+---
 title: DragonEye-Auditor
 emoji: 🐉
 colorFrom: blue
 colorTo: purple
 sdk: docker
+app_file: server/app.py
 pinned: false
+---
 # 🐉 DragonEye-Auditor: Hinglish Review Intelligence Benchmark
 
 DragonEye-Auditor is a standardized reinforcement learning environment built on the OpenEnv framework. It evaluates how well Large Language Models (LLMs) can understand and moderate Indian e-commerce reviews, particularly focusing on Hinglish (Hindi + English), sarcasm, and real-world user frustration.
