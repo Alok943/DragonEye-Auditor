@@ -133,7 +133,7 @@ docker run -p 7860:7860 hinglish-auditor-env
 HF_TOKEN=your_api_key
 MODEL_NAME=gemini-2.5-flash
 ENV_URL=http://localhost:7860
-BENCHMARK=hinglish-review-auditor
+BENCHMARK=DragonEye-Auditor
 ```
 
 ---
@@ -190,6 +190,7 @@ This enables:
 ## 👨‍💻 Author
 
 **DragonEye Team**
+ALOK SINGH [LEADER]
 Focus: RL Infrastructure × Hinglish NLP
 
 ---
