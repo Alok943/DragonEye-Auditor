@@ -1048,5 +1048,111 @@
     "lang": "en",
     "difficulty": "medium",
     "nuance": false
+  },
+  
+  {
+    "text": "वाह क्या service hai, bina bataye order cancel kar diya 👍",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Best app ever, paise kaat ke order history hi gayab kar diya. Amazing!",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "5 star experience, product mila hi nahi but refund bhi nahi mila. Perfect combo.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Kya mast delivery hai, 3 hafte late aur box bhi toot gaya. Mazaa aa gaya.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Absolutely loved it, phone ek din mein hi dead ho gaya. Worth every penny.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Seller itna honest hai ki duplicate product bhejne mein bhi sharam nahi aayi.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Kamal ka system hai, payment successful but order exist hi nahi karta.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Bohot hi premium feel aati hai jab product haath mein toot jata hai.",
+    "label": "SAFE",
+    "lang": "hi",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Incredible quality, ek baar use kiya aur phir kabhi use karne ka chance hi nahi mila.",
+    "label": "SAFE",
+    "lang": "en",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Support team next level hai, itni silence maintain karte hain ki reply hi nahi dete.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Wah kya packaging thi, product andar hi nahi tha. Innovation dekho.",
+    "label": "SAFE",
+    "lang": "hi",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Totally satisfied, galat item bhej kar bhi confidence maintain kiya seller ne.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Bahut hi fast delivery hai, order karne se pehle hi cancel ho gaya.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Kya zabardast product hai, use karte hi repair center jaana pad gaya.",
+    "label": "SAFE",
+    "lang": "hi",
+    "difficulty": "hard",
+    "nuance": true
+  },
+  {
+    "text": "Perfect experience, paisa gaya, product gaya, aur support bhi gaya.",
+    "label": "SAFE",
+    "lang": "hinglish",
+    "difficulty": "hard",
+    "nuance": true
   }
 ]

@@ -5,19 +5,20 @@ from typing import Literal, Dict, Any
 # 1. The Agent's Output (What the AI sends)
 # ==========================================
 class Action(BaseModel):
-    # Literal enforces strict type-checking. 
-    # If the AI predicts "SPAMMY" instead of "SPAM", Pydantic rejects it.
-    label: Literal["SAFE", "SPAM", "TOXIC"] = Field(
+    label: Literal["SAFE", "SPAM", "TOXIC", "INVALID"] = Field(
         ..., description="The final audit decision for the review."
     )
-    lang: Literal["en", "hi", "hinglish"] = Field(
+    lang: Literal["en", "hi", "hinglish", "unknown"] = Field(
         ..., description="The detected primary language of the review."
+    )
+    nuance_detected: bool = Field(
+        ..., 
+        description="True if the review contains sarcasm, irony, slang, or indirect tone (e.g., positive words used to express negative experience). False otherwise."
     )
     reasoning: str = Field(
         ..., description="A brief explanation of why the AI chose this label."
     )
     model_name: str = Field(default="unknown", description="The LLM used for inference.")
-
 # ==========================================
 # 2. The Environment's State (What the AI sees)
 # ==========================================
@@ -47,3 +48,5 @@ class StepResult(BaseModel):
         default_factory=dict, 
         description="Extra metadata for debugging (e.g., actual ground truth)."
     )
+class ResetRequest(BaseModel):
+    start_index: int = 0

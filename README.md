@@ -1,72 +1,203 @@
-🐉 DragonEye-Auditor: The Hinglish OpenEnv Benchmark
+# 🐉 DragonEye-Auditor: Hinglish Review Intelligence Benchmark
 
-DragonEye-Auditor is a standardized reinforcement learning environment built on the OpenEnv framework. It is designed to evaluate and audit the ability of Large Language Models (LLMs) to moderate Indian e-commerce reviews—specifically focusing on the linguistic "blind spots" of Hinglish (Hindi + English) code-switching, regional slang, and sarcastic frustration.
-🎯 The Problem: The "Hinglish" Gap
+DragonEye-Auditor is a standardized reinforcement learning environment built on the OpenEnv framework. It evaluates how well Large Language Models (LLMs) can understand and moderate Indian e-commerce reviews, particularly focusing on Hinglish (Hindi + English), sarcasm, and real-world user frustration.
 
-In 2026, Indian e-commerce is dominated by regional linguistic nuances. Traditional moderation systems often fail to distinguish between:
+---
 
-    True Toxicity: Abusive language and threats.
+## 🎯 Motivation
 
-    Sarcastic Frustration: High-value feedback disguised as praise (e.g., "Truly a world-class paperweight!").
+Modern Indian e-commerce platforms operate in a linguistically complex environment where users frequently mix Hindi and English, use regional slang, and express dissatisfaction indirectly through sarcasm.
 
-    Code-Switched Spam: Promotional links hidden in Hinglish praise.
+Traditional moderation systems struggle to distinguish between:
 
-DragonEye-Auditor provides the "Driver's License Test" for any LLM intended for the Indian market.
-🏗️ Architecture: The OpenEnv Standard
+* **True Toxicity** → Direct abuse, threats, harassment
+* **Sarcastic Frustration** → Negative experience expressed via positive tone
+* **Code-Switched Spam** → Promotional content hidden in Hinglish
 
-We have strictly decoupled the Environment (The Referee) from the Agent (The Player) using a containerized microservice architecture.
+DragonEye-Auditor acts as a **benchmark environment** to evaluate whether LLMs can handle these real-world nuances effectively.
 
-    The Environment (Docker/FastAPI): An immutable server that holds the ground-truth dataset and grading logic. It exposes two core endpoints: /reset and /step.
+---
 
-    The Agent (Python SDK): An LLM-driven auditor (Gemini 2.5 Flash / Llama 8B) that interacts with the environment purely via REST APIs. No "cheating" or direct data access is possible.
+## 🏗️ Architecture
 
-⚖️ Multi-Objective Reward Shaping
+This project follows the OpenEnv standard by separating:
 
-To provide a granular learning signal, we implemented a Weighted Reward System (0.2 / 0.3 / 0.5):
-Component	Weight	Logic
-Linguistic ID	0.2	Rewards correct identification of en, hi, or hinglish.
-Contextual Nuance	0.3	Rewards detection of sarcasm, irony, or cultural slang.
-Audit Label	0.5	The final categorical decision (SAFE, SPAM, TOXIC).
+### 🧱 Environment (Server)
 
-    Hard-Case Bonus: We provide a +0.1 pity bonus for agents that fail the label but correctly identify "Hard" difficulty sarcasm—this encourages the agent to prioritize reasoning over lucky guesses.
+* Built using FastAPI and deployed as a containerized service
+* Holds dataset, ground truth, and reward logic
+* Exposes:
 
-📊 Benchmark Results (50-Episode Stress Test)
+  * `/reset`
+  * `/step`
 
-We ran a deterministic sequential audit starting from Index 30 (the "Hard" sarcasm block) to compare a frontier model against a local edge model.
-Model	Avg. Reward	Key Finding
-Gemini 2.5 Flash	0.84	Mastered Hinglish slang; occasionally missed subtle coupon spam.
-Llama 3.1 8B	0.62	Struggles with sarcasm; frequently flags regional praise as TOXIC.
-🚀 Getting Started
-1. Launch the Environment (Docker)
-Bash
+### 🤖 Agent (Inference Script)
 
+* LLM-driven auditor using OpenAI-compatible API
+* Interacts via REST API only
+* Tested using:
+
+  * **Gemini 2.5 Flash**
+  * **Llama 3.1 8B (baseline comparison)**
+
+---
+
+## 🔍 Observation Space
+
+Each step returns:
+
+* `review_text` *(string)* → Review to analyze
+* `task_id` *(string)* → Current task context
+* `session_id` *(string)* → Unique episode identifier
+
+---
+
+## 🎮 Action Space
+
+The agent must return a JSON object:
+
+* `label` → SAFE | SPAM | TOXIC
+* `lang` → en | hi | hinglish
+* `nuance_detected` → boolean (sarcasm/slang detection)
+* `reasoning` → short explanation
+* `model_name` → model identifier
+
+---
+
+## 🧩 Tasks
+
+### Task 1: Language Identification (Easy)
+
+Identify whether the review is English, Hindi, or Hinglish.
+
+### Task 2: Basic Moderation (Medium)
+
+Classify reviews as SAFE, SPAM, or TOXIC.
+
+### Task 3: Sarcasm & Slang Detection (Hard)
+
+Handle indirect frustration, sarcasm, and cultural nuances.
+
+---
+
+## ⚖️ Reward Design
+
+We use a weighted multi-objective reward system:
+
+| Component            | Weight | Description                     |
+| -------------------- | ------ | ------------------------------- |
+| Language Detection   | 0.2    | Correct language identification |
+| Nuance Detection     | 0.3    | Sarcasm/slang understanding     |
+| Label Classification | 0.5    | Final moderation decision       |
+
+This ensures the agent is rewarded not just for correctness, but for **understanding intent**.
+
+---
+
+## 🧠 Key Insight
+
+We observed that most models fail not in classification, but in **intent understanding**.
+
+By separating:
+
+* **Nuance (intent)**
+* **Label (decision)**
+
+DragonEye-Auditor provides a more realistic evaluation of moderation systems in multilingual settings.
+
+---
+
+## 📊 Baseline Results
+
+| Model            | Avg Reward | Key Observations                          |
+| ---------------- | ---------- | ----------------------------------------- |
+| Gemini 2.5 Flash | 0.84       | Strong Hinglish and sarcasm understanding |
+| Llama 3.1 8B     | 0.62       | Struggles with nuance and sarcasm         |
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Run Environment
+
+```bash
 docker build -t hinglish-auditor-env .
 docker run -p 7860:7860 hinglish-auditor-env
+```
 
-2. Run the Auditor Agent
+---
 
-Ensure your .env file contains your HF_TOKEN (Gemini Key) and MODEL_NAME.
-Bash
+### 2. Configure `.env`
 
+```env
+HF_TOKEN=your_api_key
+MODEL_NAME=gemini-2.5-flash
+ENV_URL=http://localhost:7860
+BENCHMARK=hinglish-review-auditor
+```
+
+---
+
+### 3. Run Inference
+
+```bash
 python inference.py
+```
 
-🛡️ Audit Observability
+---
 
-Every decision made by the agent is logged to audit_results.jsonl with full metadata, including:
+## 🌐 Deployment
 
-    Timestamp (ISO 8601)
+The environment is deployed as a containerized Hugging Face Space with OpenEnv compatibility.
 
-    Model ID
+For development and testing, we also used:
 
-    Agent Reasoning (The "Why" behind the score)
+* **ngrok tunneling**
+* Remote GPU setup (RTX 4080 system)
 
-    Reward Breakdown
+This allowed efficient experimentation without local compute constraints.
 
-This transparency is critical for MLOps monitoring and bias detection in automated moderation systems.
-👨‍💻 The Team: DragonEye
+---
 
-    Core Logic: [Your Name/Handle]
+## 🛡️ Observability
 
-    Theme: RL Infrastructure & Hinglish NLP
+All agent decisions are logged with metadata:
 
-    Submission Round: Round 1 - OpenEnv Mini-RL Environment
+* Timestamp
+* Model name
+* Predicted vs expected labels
+* Reward values
+* Reasoning
+
+This enables:
+
+* debugging
+* bias detection
+* performance tracking
+
+---
+
+## 🧪 OpenEnv Compliance
+
+✔ Dockerized environment
+✔ `/reset` and `/step` endpoints
+✔ Standardized observation/action space
+✔ OpenAI-compatible inference
+✔ Multi-task evaluation
+
+---
+
+## 👨‍💻 Author
+
+**DragonEye Team**
+Focus: RL Infrastructure × Hinglish NLP
+
+---
+
+## 🚀 Summary
+
+DragonEye-Auditor is not just a benchmark — it is a **real-world stress test** for LLMs operating in multilingual, culturally nuanced environments.
+
+It highlights a critical gap in current AI systems:
+
+> Understanding language is not enough — models must understand intent.
