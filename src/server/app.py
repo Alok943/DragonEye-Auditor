@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from .core.evaluator import get_agent_decision, get_auditor_grade
-from .core.models import Observation, Action, StepResult 
+from env_server.core.evaluator import get_auditor_grade
+from env_server.core.models import Observation, Action, StepResult
 
 app = FastAPI(title="DragonEye-Auditor: OpenEnv")
 
@@ -37,11 +37,15 @@ async def get_state():
         task_id=current_task_id # <-- FIX 1: Added mandatory task_id
     )
 
+import random
+
 @app.post("/reset", response_model=Observation)
 async def reset_environment():
     global current_review_index
-    START_INDEX = int(os.getenv("START_INDEX", 0))
-    current_review_index = START_INDEX
+    # FIX: Drop the agent at a random point in the dataset so it sees 
+    # different difficulty levels, languages, and labels across tasks!
+    current_review_index = random.randint(0, len(REAL_REVIEWS) - 1)
+    
     return await get_state()
     
 @app.post("/step", response_model=StepResult)
@@ -81,3 +85,11 @@ async def step_environment(action: Action):
         done=True, 
         info={"message": f"Agent scored: {reward:.2f}/1.0", "gt_label": expected_truth.get("label")}
     )
+def main():
+    import uvicorn
+    # This matches the HF Spaces default port
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
+
+# The validator is explicitly looking for this standard Python block!
+if __name__ == "__main__":
+    main()

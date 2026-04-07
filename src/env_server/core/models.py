@@ -28,7 +28,7 @@ class Observation(BaseModel):
     session_id: str = Field(
         ..., description="Unique ID for tracking the current audit session."
     )
-    task_id: str # <-- ADD THIS so the validator knows which task is running
+    task_id: str = Field(..., description="The OpenEnv task ID for this observation.")
 
 # ==========================================
 # 3. The OpenEnv Loop Standard (The Response)

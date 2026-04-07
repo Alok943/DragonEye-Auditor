@@ -35,9 +35,9 @@ class AuditorEnv:
         reward = calculate_reward(
             expected_label=self.current_item["label"],
             expected_lang=self.current_item["lang"],
+            expected_nuance=self.current_item.get("nuance", False), # <-- FIX: Changed from 'difficulty'
             action_label=action.label,
-            action_lang=action.lang,
-            difficulty=self.current_item["difficulty"]
+            action_lang=action.lang
         )
 
         # Ground truth data (Agent only sees this AFTER making a decision)

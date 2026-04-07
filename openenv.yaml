@@ -1,16 +1,50 @@
 name: hinglish-review-auditor
 version: "1.0.0"
 description: "A real-world environment for auditing Indian e-commerce reviews in mixed-language (Hinglish). Agents must detect spam, toxicity, and nuanced sarcasm."
+
+reward_range: [0.0, 1.0]
+
+observation_space:
+  type: object
+  fields:
+    review_text:
+      type: string
+      description: "The e-commerce review text to be audited."
+    session_id:
+      type: string
+      description: "Unique ID for the current audit session."
+    task_id:
+      type: string
+      description: "Which task this observation belongs to."
+
+action_space:
+  type: object
+  fields:
+    label:
+      type: string
+      enum: [SAFE, SPAM, TOXIC]
+      description: "The moderation decision."
+    lang:
+      type: string
+      enum: [en, hi, hinglish]
+      description: "Detected language of the review."
+    reasoning:
+      type: string
+      description: "Agent's explanation for the decision."
+    model_name:
+      type: string
+      description: "LLM used for inference."
+
 tasks:
   - id: task_1_language_id
     name: "Language Identification"
-    difficulty: "easy"
+    difficulty: easy
     description: "Correctly identify if the review is 'en', 'hi', or 'hinglish'."
   - id: task_2_basic_moderation
     name: "Standard Moderation"
-    difficulty: "medium"
+    difficulty: medium
     description: "Classify standard text as 'SAFE', 'SPAM', or 'TOXIC'."
   - id: task_3_sarcasm_slang
     name: "Sarcasm and Slang Detection"
-    difficulty: "hard"
+    difficulty: hard
     description: "Accurately classify hard edge-cases involving regional slang and sarcastic frustration."
