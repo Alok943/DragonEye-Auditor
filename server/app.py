@@ -9,8 +9,8 @@ from env_server.core.models import Observation, Action, StepResult
 
 app = FastAPI(title="DragonEye-Auditor: OpenEnv")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE_DIR,"data", "reviews_v1.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "data", "reviews_v1.json")
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
     REAL_REVIEWS = json.load(f)
