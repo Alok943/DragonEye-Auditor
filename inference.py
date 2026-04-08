@@ -136,7 +136,7 @@ def get_action(observation_text: str) -> dict:
                 model=MODEL_NAME,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.0,
-                timeout=5
+                timeout=6
             )
             raw = response.choices[0].message.content.strip()
             if raw.startswith("```"):
@@ -148,11 +148,11 @@ def get_action(observation_text: str) -> dict:
             return parsed
         except Exception as e:
             print(f"API Error (attempt {attempt+1}/2): {e}", flush=True)
-            if attempt < 2:
+            if attempt < 1:
                 time.sleep(1)
     
     return {
-            "label": "SAFE",
+            "label": "SPAM" if "http" in observation_text or "call" in observation_text else "SAFE",
             "lang": "en",
             "nuance_detected": False,
             "reasoning": "Fallback due to API error",

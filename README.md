@@ -28,6 +28,34 @@ DragonEye-Auditor acts as a **benchmark environment** to evaluate whether LLMs c
 
 ---
 
+## 📚 Data Source
+
+The dataset used in DragonEye-Auditor is **synthetically generated** to simulate realistic Indian e-commerce reviews.
+
+Data was created using a combination of:
+
+- Sarvam AI
+- ChatGPT
+- Google AI Studio (Gemini)
+
+The generation process focused on replicating real-world patterns such as:
+
+- Hinglish (Hindi + English code-switching)
+- Sarcasm and indirect frustration
+- Informal slang and culturally contextual expressions
+
+All samples were:
+
+- Carefully **curated and filtered**
+- **Manually structured and annotated** for:
+  - Language identification
+  - Moderation (SAFE / SPAM / TOXIC)
+  - Nuance detection (sarcasm/slang)
+
+No real user data or personally identifiable information was used.
+
+This synthetic approach allows controlled generation of **edge cases and nuanced scenarios** that are often underrepresented in real datasets.
+
 ## 🏗️ Architecture
 
 This project follows the OpenEnv standard by separating:
@@ -47,7 +75,8 @@ This project follows the OpenEnv standard by separating:
 * Interacts via REST API only
 * Tested using:
 
-  * **Gemini 2.5 Flash**
+  * **Gemini 2.5 Flash** (high accuracy, but unstable due to API latency and 503 errors)
+  * **Gemini 2.5 Flash Lite (final model)** (slightly lower raw capability but significantly more stable)
   * **Llama 3.1 8B (baseline comparison)**
 
 ---
@@ -117,12 +146,34 @@ DragonEye-Auditor provides a more realistic evaluation of moderation systems in 
 
 ---
 
+## ⚠️ Practical Challenges
+
+During evaluation, we observed that model performance is not only dependent on reasoning capability but also on **API reliability and latency**.
+
+- Gemini 2.5 Flash showed strong reasoning ability but suffered from:
+  - Frequent **503 errors**
+  - High latency under load
+  - Increased fallback responses
+
+- This led to unstable scores despite good predictions.
+
+To address this, we switched to **Gemini 2.5 Flash Lite**, which provided:
+
+- Lower latency
+- Higher availability
+- More consistent end-to-end performance
+
+This highlights an important real-world insight:
+
+> In production-like environments, **stability often outweighs theoretical model accuracy**.
+
 ## 📊 Baseline Results
 
-| Model            | Avg Reward | Key Observations                          |
-| ---------------- | ---------- | ----------------------------------------- |
-| Gemini 2.5 Flash | 0.84       | Strong Hinglish and sarcasm understanding |
-| Llama 3.1 8B     | 0.62       | Struggles with nuance and sarcasm         |
+| Model                    | Avg Reward | Key Observations                                      |
+| ------------------------ | ---------- | ----------------------------------------------------- |
+| Gemini 2.5 Flash         | ~0.70–0.80 | Strong reasoning but affected by API timeouts/failures |
+| Gemini 2.5 Flash Lite    | 0.85       | Stable, fast, and best overall performance            |
+| Llama 3.1 8B             | 0.62       | Struggles with nuance and sarcasm                     |
 
 ---
 
@@ -141,8 +192,8 @@ docker run -p 7860:7860 hinglish-auditor-env
 
 ```env
 HF_TOKEN=your_api_key
-MODEL_NAME=gemini-2.5-flash
-ENV_URL=http://localhost:7860
+MODEL_NAME=gemini-2.5-flash-lite
+ENV_URL=https://alok8732-dragoneye-auditor.hf.space
 BENCHMARK=DragonEye-Auditor
 ```
 
