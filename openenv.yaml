@@ -1,4 +1,4 @@
-env_name: DragonEye-Auditor ✅
+env_name: DragonEye-Auditor
 version: "1.0.0"
 description: "A real-world environment for auditing Indian e-commerce reviews in mixed-language (Hinglish). Agents must detect spam, toxicity, and nuanced sarcasm."
 
