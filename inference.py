@@ -1,12 +1,12 @@
 import os
 import json
 import httpx
+import time
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-load_dotenv()
 
 API_BASE_URL = os.getenv("API_BASE_URL", "https://openrouter.ai/api/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "google/gemini-2.5-flash-lite")
@@ -31,9 +31,9 @@ class TaskConfig(TypedDict):
     episodes: int
     
 TASK_CONFIGS: list[TaskConfig] = [
-    {"task_id": "task_1_language_id",         "episodes": 30},
-    {"task_id": "task_2_basic_moderation",  "episodes": 30},
-    {"task_id": "task_3_sarcasm_slang",     "episodes": 30},
+    {"task_id": "task_1_language_id",         "episodes":20},
+    {"task_id": "task_2_basic_moderation",  "episodes": 20},
+    {"task_id": "task_3_sarcasm_slang",     "episodes": 20},
 ]
 
 def get_action(observation_text: str) -> dict:
@@ -80,10 +80,9 @@ def get_action(observation_text: str) -> dict:
     '====================\n'
     'LANGUAGE RULES:\n'
     '====================\n'
-    '- "en" = Pure English\n'
-    '- "hi" = Pure Hindi (even if written in English script)\n'
-    '- If the sentence is mostly English with minor Hindi words → classify as "en", NOT "hinglish"\n'
-    '- "hinglish" = mix of Hindi + English\n\n'
+    '- "en" = pure English (no Hindi words)\n'
+    '- "hi" = pure Hindi\n'
+    '- "hinglish" = ANY mix of Hindi + English words\n\n'
 
     '====================\n'
     'NUANCE DETECTION:\n'
@@ -130,13 +129,14 @@ def get_action(observation_text: str) -> dict:
     '- Return ONLY valid JSON starting with { and ending with }\n'
     '- No extra text, no markdown, no explanation outside JSON\n'
 )
-    import time
-    for attempt in range(3):  # 3 attempts total
+    
+    for attempt in range(2):  # 3->2 attempts total
         try:
             response = client.chat.completions.create(
                 model=MODEL_NAME,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.2,
+                temperature=0.0,
+                timeout=5
             )
             raw = response.choices[0].message.content.strip()
             if raw.startswith("```"):
@@ -147,9 +147,9 @@ def get_action(observation_text: str) -> dict:
             parsed["model_name"] = MODEL_NAME
             return parsed
         except Exception as e:
-            print(f"API Error (attempt {attempt+1}/3): {e}", flush=True)
+            print(f"API Error (attempt {attempt+1}/2): {e}", flush=True)
             if attempt < 2:
-                time.sleep(15)
+                time.sleep(1)
     
     return {
             "label": "SAFE",
@@ -166,7 +166,7 @@ def run_task(task_id: str, episodes: int, http: httpx.Client):
     print(f"[START] task={task_id} env={BENCHMARK} model={MODEL_NAME}", flush=True)
 
     # Reset env before each task
-    resp = http.post(f"{ENV_URL}/reset", json={"task_id": task_id})
+    resp = http.post(f"{ENV_URL}/reset",json={"task_id": task_id})
     resp.raise_for_status()
     obs = resp.json()
 
@@ -201,10 +201,12 @@ def run_task(task_id: str, episodes: int, http: httpx.Client):
 if __name__ == "__main__":
     
 
-    with httpx.Client(timeout=60.0) as http:
+    with httpx.Client(timeout=120.0) as http:
         scores = {}
         for task_cfg in TASK_CONFIGS:
             score = run_task(task_cfg["task_id"], task_cfg["episodes"], http)
             scores[task_cfg["task_id"]] = score
-
+            
+        overall = sum(scores.values()) / len(scores)
+        print(f"\nOverall average score: {overall:.2f}", flush=True)
     
