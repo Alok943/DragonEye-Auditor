@@ -8,10 +8,10 @@ load_dotenv()
 
 load_dotenv()
 
-API_BASE_URL = os.getenv("API_BASE_URL")
-MODEL_NAME = os.getenv("MODEL_NAME")
+API_BASE_URL = os.getenv("API_BASE_URL", "https://openrouter.ai/api/v1")
+MODEL_NAME = os.getenv("MODEL_NAME", "google/gemini-2.5-flash-lite")
 HF_TOKEN = os.getenv("HF_TOKEN")
-ENV_URL = os.getenv("ENV_URL", "http://localhost:7860")
+ENV_URL = os.getenv("ENV_URL", "https://alok8732-dragoneye-auditor.hf.space")
 BENCHMARK = "DragonEye-Auditor"
 
 if not API_BASE_URL or not MODEL_NAME or not HF_TOKEN:
